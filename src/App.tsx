@@ -20,23 +20,33 @@ export default function App() {
   }, []);
 
   async function loadCustomers() {
-    const response = await api.get("/customers");
-    setCustomers(response.data);
+    try {
+      const response = await api.get("/customers");
+      setCustomers(response.data);
+    } catch (error) {
+      console.log(error);
+      // Handle the error as needed (e.g., show an error message to the user)
+    }
   }
 
   async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    if (!nameRef.current?.value || !emailRef.current?.value) return;
+    try {
+      event.preventDefault();
+      if (!nameRef.current?.value || !emailRef.current?.value) return;
 
-    const response = await api.post("/customer", {
-      name: nameRef.current?.value,
-      email: emailRef.current?.value,
-    });
+      const response = await api.post("/customer", {
+        name: nameRef.current?.value,
+        email: emailRef.current?.value,
+      });
 
-    setCustomers((allCustomers) => [...allCustomers, response.data]);
+      setCustomers((allCustomers) => [...allCustomers, response.data]);
 
-    nameRef.current.value = "";
-    emailRef.current.value = "";
+      nameRef.current.value = "";
+      emailRef.current.value = "";
+    } catch (error) {
+      console.log(error);
+      // Handle the error as needed (e.g., show an error message to the user)
+    }
   }
 
   async function handleDelete(id: string) {
@@ -51,6 +61,7 @@ export default function App() {
       setCustomers(allCustomers);
     } catch (error) {
       console.log(error);
+      // Handle the error as needed (e.g., show an error message to the user)
     }
   }
 
